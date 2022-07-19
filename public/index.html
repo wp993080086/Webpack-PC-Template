@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible"
+    content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0">
+  <link rel="icon"
+    href="<%= BASE_URL %>favicon.ico">
+  <meta http-equiv="Cache-Control"
+    content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma"
+    content="no-cache" />
+  <meta http-equiv="Expires"
+    content="0" />
+  <title>厂商任务系统</title>
+  <!--css样式文件的加载-->
+  <% for (var i in htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+  <% } %>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .compatible-container {
+      height: 100vh;
+      display: none;
+      background: #fff;
+    }
+
+    .compatible-container__hd {
+      background: #3e4347;
+      height: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .compatible-container__hd-title {
+      font-size: 100px;
+      font-weight: bold;
+      color: #eee;
+      padding-left: 10%;
+    }
+
+    .compatible-container .compatible-reason {
+      color: #606266;
+      font-size: 32px;
+      line-height: 1.5;
+      padding: 0 30% 0 10%;
+      margin-top: 20px;
+    }
+
+    .compatible-download {
+      padding: 20px 0 0 10%;
+    }
+
+    .compatible-download a {
+      color: #007aec;
+      text-decoration: none;
+      font-size: 24px;
+    }
+
+    .compatible-download a:hover {
+      color: #309bff;
+      text-decoration: underline;
+    }
+
+    .compatible-logo {
+      background: url('./logo.png') center center no-repeat;
+      width: 98px;
+      height: 67px;
+      background-size: 98px 67px;
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: .8;
+    }
+  </style>
+</head>
+
+<body>
+  <!--js文件的加载-->
+  <% for (let i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+  <% } %>
+  <noscript>
+    <strong>请开启浏览器的JavaScript功能。</strong>
+  </noscript>
+  <div class="compatible-container"
+    id="compatible-container">
+    <div class="compatible-container__hd">
+      <div class="compatible-container__hd-title">
+        出错了...
+      </div>
+    </div>
+    <div class="compatible-container__bd">
+      <div class="compatible-reason">
+        您使用的浏览器版本过低，存在兼容性问题，建议使用新版谷歌浏览器以获得最佳使用体验。
+      </div>
+      <div class="compatible-download">
+        <a target="_blank"
+          href="https://www.google.cn/chrome/">下载谷歌浏览器</a>
+      </div>
+      <div class="compatible-logo"></div>
+    </div>
+  </div>
+  <div id="app"></div>
+  <script type='text/javascript'>
+    try {
+      eval("const a = [1, 2, 2];let b = {...a};")
+    } catch (error) {
+      var appdom = document.getElementById('app')
+      var compatible_container = document.getElementById('compatible-container')
+      if (appdom) {
+        appdom.remove()
+        document.body.style.height = '100vh'
+      }
+      if (compatible_container) {
+        compatible_container.style.display = 'block'
+      }
+    }
+  </script>
+</body>
+
+</html>
