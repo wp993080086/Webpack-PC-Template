@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosRequestHeaders } from 'axios'
 import qs from 'qs'
 import Module from './module'
-import { errorCode, baseRouter } from '@/config'
+import { errorCode, baseRouter, httpCode } from '@/config'
 import { Toast, Alert } from '@/utils/toast'
 import Token from '@/services/token'
 import { TQueryType, THaveCode, TParams, TRequestType, THttpResponse } from './request.d'
@@ -37,7 +37,9 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     if (!config.noAccessToken) {
+      // eslint-disable-next-line
       ;(config.headers as AxiosRequestHeaders).token = Token.getUserToken()
+      // eslint-disable-next-line
       ;(config.headers as AxiosRequestHeaders).refreshToken = Token.getSToken()
     }
     return config
@@ -59,38 +61,28 @@ instance.interceptors.response.use(
         Alert('登录状态过期，请重新登录 !', { showClose: false }).then(() => {
           window.location.href = baseRouter.LOGIN
         })
+      } else {
+        Toast(`${data.code}：${data.message}`, { type: 'error' })
       }
-      return Toast(data.message, { type: 'error' })
+      return Promise.reject(new Error(data.message || '请求出错了'))
     }
     return data
   },
   error => {
-    // 请求失败
-    try {
-      const errorInfo = error.response
-      const status = (errorInfo.status || 0) * 1
-      Toast(errorInfo.data.message, { type: 'error' })
-      switch (status) {
-        case 400:
-          console.error('400 服务器不理解该请求 ！')
-          break
-        case 403:
-          console.error('403 服务器拒绝该请求 ！')
-          break
-        case 404:
-          console.error('404 服务器找不到该请求 ！')
-          break
-        case 500:
-          console.error('500 系统内部错误 ！')
-          break
-        default:
-          console.error(errorInfo.data.message || '系统错误 ！')
-      }
-      return Promise.reject(errorInfo)
-    } catch (e) {
-      Toast('网络开小差啦 ！', { type: 'error' })
-      return Promise.reject(new Error('网络开小差啦 ！'))
+    const { response } = error
+    const resData = response?.data
+    let errorMsg = `${response?.status || error.message}：请求出错啦 ~`
+    const httpMessage = httpCode.find(item => item.code === response?.status)
+    if (httpMessage) {
+      errorMsg = httpMessage.message
+      console.error(httpMessage.message)
     }
+    if (resData?.message && resData?.code) {
+      Toast(`${resData.code}：${resData.message}`, { type: 'error', duration: 3000 })
+    } else {
+      Toast(errorMsg, { type: 'error', duration: 3000 })
+    }
+    return Promise.reject(response)
   }
 )
 
