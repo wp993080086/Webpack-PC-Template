@@ -23,35 +23,11 @@
     "sourceMap": true,
     "resolveJsonModule": true, // 允许导入json文件
     "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "/#/*": ["types/*"]
-    },
-    "types": [ // 加载的声明文件包 如果指定了某个值， 她会在 typeRoots 下找这个包，找到了就只加载这个包
-      "webpack-env",
-      "node",
-      "vue"
-    ],
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ],
+    "paths": {"@/*": ["src/*"]}, // 路径
+    "types": ["webpack-env", "node", "vue"], // 加载的声明文件包 如果指定了某个值， 她会在 typeRoots 下找这个包，找到了就只加载这个包
+    "lib": ["esnext","dom", "dom.iterable", "scripthost"],
     "plugins": [{"name": "typescript-plugin-css-modules"}] // 不需要写tsx可以注释掉
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "src/*.ts",
-    "types/**/*.d.ts",
-    "types/**/*.ts",
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.js"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/*.ts", "types/**/*.d.ts", "types/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.js"]
 }

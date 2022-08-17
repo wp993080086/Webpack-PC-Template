@@ -100,13 +100,7 @@ module.exports = {
     ],
     devtool: env === 'dev' ? 'eval-cheap-module-source-map' : 'nosources-source-map',
     externals: env === 'dev' ? {} : objExternals,
-    cache: {
-      type: 'filesystem',
-      maxAge: 86400000, // 缓存一天
-      buildDependencies: {
-        config: [__filename]
-      }
-    },
+    cache: env !== 'dev' ? false : { type: 'filesystem' }, // 仅在本地环境启用缓存
     optimization: {
       nodeEnv: false // 不自动生成env文件
     }
